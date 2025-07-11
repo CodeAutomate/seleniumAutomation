@@ -4,6 +4,11 @@ node {
         git branch: 'main', url: 'https://github.com/CodeAutomate/seleniumAutomation'
     }
 
+    stage('Copy Credentials') {
+        echo "🔑 Kopiere Credentials aus Jenkins..."
+        bat 'copy "%MY_APP_CREDENTIALS%" src\\test\\resources\\config.properties'
+    }
+
     stage('Setup Maven') {
         echo "⚙️ Setting up Maven environment..."
         def mvnHome = tool name: 'Maven_3.9', type: 'hudson.tasks.Maven$MavenInstallation'
