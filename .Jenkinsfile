@@ -5,7 +5,7 @@ node {
     }
 
     // Credentials-Stage mit withCredentials-Block
-    withCredentials([file(credentialsId: 'dein-credentials-id', variable: 'MY_APP_CREDENTIALS')]) {
+    withCredentials([file(credentialsId: 'my-app-credentials', variable: 'MY_APP_CREDENTIALS')]) {
         stage('Copy Credentials') {
             echo "🔑 Kopiere Credentials aus Jenkins..."
             bat 'copy "%MY_APP_CREDENTIALS%" src\\test\\resources\\config.properties'
