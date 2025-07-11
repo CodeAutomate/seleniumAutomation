@@ -7,22 +7,22 @@ node {
     stage('Setup Maven') {
         echo "⚙️ Setting up Maven environment..."
         def mvnHome = tool name: 'Maven_3.9', type: 'hudson.tasks.Maven$MavenInstallation'
-        env.PATH = "${mvnHome}/bin:${env.PATH}"
+        env.PATH = "${mvnHome}\\bin;${env.PATH}"
     }
 
     stage('Build') {
         echo "🔨 Building the project..."
-        sh 'mvn clean compile'
+        bat 'mvn clean compile'
     }
 
     stage('Test') {
         echo "🧪 Running Selenium JUnit5 tests..."
-        sh 'mvn test'
+        bat 'mvn test'
     }
 
     stage('Allure Report') {
         echo "📊 Generating Allure report..."
-        sh 'mvn allure:report'
+        bat 'mvn allure:report'
         // optional: publish the report (requires Allure plugin on Jenkins)
         allure includeProperties: false, jdk: '', reportBuildPolicy: 'ALWAYS'
     }
