@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- pom.xml -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -77,12 +77,6 @@
                         <include>**/*Test.java</include>
                     </includes>
                     <useModulePath>false</useModulePath>
-                    <properties>
-                        <property>
-                            <name>junit.platform.listeners.default</name>
-                            <value>io.qameta.allure.junitplatform.AllureJunitPlatformListener</value>
-                        </property>
-                    </properties>
                 </configuration>
             </plugin>
             <plugin>
@@ -96,9 +90,8 @@
                 <executions>
                     <execution>
                         <id>allure-report</id>
-                        <phase>test</phase>
+                        <phase>verify</phase>
                         <goals>
-                            <goal>serve</goal>
                             <goal>report</goal>
                         </goals>
                     </execution>
