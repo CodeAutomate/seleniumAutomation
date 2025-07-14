@@ -77,12 +77,32 @@
                         <include>**/*Test.java</include>
                     </includes>
                     <useModulePath>false</useModulePath>
+                    <properties>
+                        <property>
+                            <name>junit.platform.listeners.default</name>
+                            <value>io.qameta.allure.junitplatform.AllureJunitPlatformListener</value>
+                        </property>
+                    </properties>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
                 <version>${allure.maven.version}</version>
+                <configuration>
+                    <resultsDirectory>target/allure-results</resultsDirectory>
+                    <reportDirectory>target/site/allure-maven-plugin</reportDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>allure-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>serve</goal>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
