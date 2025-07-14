@@ -1,5 +1,6 @@
 package tests.desktop;
 
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,7 +12,8 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
+@Epic("Registrierung")
+@Feature("Negative Registrierung Desktop")
 public class RegistrationDesktopNegativeTest {
     private static final String BASE_URL = "https://meinesuppe.de";
     private WebDriver driver;
@@ -26,6 +28,7 @@ public class RegistrationDesktopNegativeTest {
                 .until(ExpectedConditions.urlContains("/mein-konto/"));
     }
 
+    @Step("Cookies akzeptieren, falls sichtbar")
     private void acceptCookiesIfVisible() {
         try {
             WebElement cookieBar = new WebDriverWait(driver, Duration.ofSeconds(3))
@@ -40,32 +43,38 @@ public class RegistrationDesktopNegativeTest {
     }
 
     @Test
+    @Story("Registrierung ohne Datenschutzerklärung")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Registrierung ohne Zustimmung zur Datenschutzerklärung")
     public void testRegistrationWithoutDataPrivacy() {
         RegistrationPage registrationPage = new RegistrationPage(driver);
         registrationPage.enterUsername(TestData.generateUsername());
         registrationPage.enterEmail(TestData.generateEmail());
         registrationPage.enterPassword(TestData.generatePassword());
-        // Datenschutzerklärung NICHT akzeptieren
         registrationPage.clickRegister();
         assertTrue(registrationPage.isDataPrivacyErrorVisible());
     }
 
     @Test
+    @Story("Registrierung mit leerem Passwort")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Registrierung ohne Passwort")
     public void testRegistrationWithEmptyPassword() {
         RegistrationPage registrationPage = new RegistrationPage(driver);
         registrationPage.enterUsername(TestData.generateUsername());
         registrationPage.enterEmail(TestData.generateEmail());
         registrationPage.acceptDataPrivacy();
-        // Kein Passwort eingeben
         registrationPage.clickRegister();
         assertTrue(registrationPage.isPasswordFieldRequired());
     }
 
     @Test
+    @Story("Registrierung mit leerer E-Mail")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Registrierung ohne E-Mail")
     public void testRegistrationWithEmptyEmail() {
         RegistrationPage registrationPage = new RegistrationPage(driver);
         registrationPage.enterUsername(TestData.generateUsername());
-        // Keine E-Mail eingeben
         registrationPage.enterPassword(TestData.generatePassword());
         registrationPage.acceptDataPrivacy();
         registrationPage.clickRegister();
