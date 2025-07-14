@@ -29,7 +29,7 @@ node {
         stage('Allure Report') {
             echo "📊 Generating Allure report..."
             bat 'mvn allure:report -Dallure.results.directory="allure-results"'
-            allure results: [[path: 'target/allure-results']], includeProperties: false, jdk: '', reportBuildPolicy: 'ALWAYS'
+            allure results: [[path: 'target/surefire-reports']], includeProperties: false, jdk: '', reportBuildPolicy: 'ALWAYS'
         }
 
         stage('Archive Test Results') {
