@@ -1,5 +1,6 @@
 package tests.desktop;
 
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,7 +16,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
+@Epic("Lieferadresse")
+@Feature("Negative Rechnungsadresse Desktop")
 public class LieferadresseDesktopNegativTest {
     private static final String BASE_URL = "https://meinesuppe.de";
     private WebDriver driver;
@@ -33,6 +35,9 @@ public class LieferadresseDesktopNegativTest {
     }
 
     @Test
+    @Story("Validierungsfehler bei Rechnungsadresse")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Rechnungsadresse mit fehlenden Pflichtfeldern")
     public void testEditBillingAddressValidationErrors() {
         String username = ConfigReader.get("username");
         String password = ConfigReader.get("password");
@@ -44,15 +49,12 @@ public class LieferadresseDesktopNegativTest {
         loginPage.login(username, password);
         waitShort();
 
-        // Navigiere zur Adressübersicht
         driver.get(BASE_URL + "/mein-konto/edit-address/");
         wait.until(ExpectedConditions.urlContains("/mein-konto/edit-address/"));
 
-        // Klicke auf "Rechnungsadresse hinzufügen" über das Page Object
         EditAddressPage editAddressPage = new EditAddressPage(driver);
         editAddressPage.clickAddBillingAddress();
 
-        // Lasse Vorname, Nachname und Straße leer
         editAddressPage.fillBillingAddress(
                 "", // Vorname leer
                 "", // Nachname leer
@@ -64,7 +66,6 @@ public class LieferadresseDesktopNegativTest {
         );
         editAddressPage.saveAddress();
 
-        // Fehlerliste prüfen
         List<String> errors = editAddressPage.getErrorMessages();
         assertEquals(3, errors.size());
         assertTrue(errors.contains("Vorname ist ein Pflichtfeld."));
@@ -72,6 +73,7 @@ public class LieferadresseDesktopNegativTest {
         assertTrue(errors.contains("Straße ist ein Pflichtfeld."));
     }
 
+    @Step("Kurze Wartezeit")
     private void waitShort() {
         try { Thread.sleep(2000); } catch (InterruptedException e) {}
     }

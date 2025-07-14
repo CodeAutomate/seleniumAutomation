@@ -1,5 +1,6 @@
 package tests.desktop;
 
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -7,7 +8,8 @@ import pageObjects.HomePage;
 import pageObjects.LoginPage;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
+@Epic("Login")
+@Feature("Negativer Desktop Login")
 public class LoginDesktopNegativeTest {
     private static final String BASE_URL = "https://meinesuppe.de";
     private WebDriver driver;
@@ -23,6 +25,9 @@ public class LoginDesktopNegativeTest {
     }
 
     @Test
+    @Story("Login mit ungültigen Zugangsdaten")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Login mit falschem Benutzernamen und Passwort")
     public void testLoginWithInvalidCredentials() {
         String invalidUsername = "invalidUser" + System.currentTimeMillis();
         String invalidPassword = "invalidPass" + System.nanoTime();
@@ -37,6 +42,7 @@ public class LoginDesktopNegativeTest {
         assertTrue(loginPage.isErrorMessageVisible());
     }
 
+    @Step("Kurze Wartezeit")
     private void waitShort() {
         try { Thread.sleep(2000); } catch (InterruptedException e) {}
     }

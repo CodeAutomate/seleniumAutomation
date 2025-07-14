@@ -1,5 +1,6 @@
 package tests.desktop;
 
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,7 +10,8 @@ import utils.ConfigReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
+@Epic("Login")
+@Feature("Desktop Login")
 public class LoginDesktopTest {
     private static final String BASE_URL = "https://meinesuppe.de";
     private WebDriver driver;
@@ -25,6 +27,9 @@ public class LoginDesktopTest {
     }
 
     @Test
+    @Story("Login mit gültigen Daten")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Erfolgreicher Login am Desktop")
     public void testLoginDesktop() {
         String username = ConfigReader.get("username");
         String password = ConfigReader.get("password");
@@ -41,6 +46,7 @@ public class LoginDesktopTest {
         assertEquals("Startseite / Mein Konto", homePage.getBreadcrumbText());
     }
 
+    @Step("Kurze Wartezeit")
     private void waitShort() {
         try { Thread.sleep(2000); } catch (InterruptedException e) {}
     }

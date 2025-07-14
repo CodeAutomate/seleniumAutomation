@@ -1,5 +1,6 @@
 package tests.desktop;
 
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -14,7 +15,8 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
+@Epic("Lieferadresse")
+@Feature("Rechnungsadresse Desktop")
 public class LieferadresseDesktopTest {
     private static final String BASE_URL = "https://meinesuppe.de";
     private WebDriver driver;
@@ -32,6 +34,9 @@ public class LieferadresseDesktopTest {
     }
 
     @Test
+    @Story("Login und Rechnungsadresse bearbeiten")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Login und Änderung der Rechnungsadresse am Desktop")
     public void testLoginAndEditBillingAddress() {
         String username = ConfigReader.get("username");
         String password = ConfigReader.get("password");
@@ -47,15 +52,12 @@ public class LieferadresseDesktopTest {
         assertTrue(driver.getCurrentUrl().endsWith("/mein-konto/"));
         assertEquals("Startseite / Mein Konto", homePage.getBreadcrumbText());
 
-        // Schritt 1: Navigiere zur Adressübersicht
         driver.get(BASE_URL + "/mein-konto/edit-address/");
         wait.until(ExpectedConditions.urlContains("/mein-konto/edit-address/"));
 
-        // Schritt 2: Klicke auf "Rechnungsadresse hinzufügen" über das Page Object
         EditAddressPage editAddressPage = new EditAddressPage(driver);
         editAddressPage.clickAddBillingAddress();
 
-        // Schritt 3: Rechnungsadresse ausfüllen
         editAddressPage.fillBillingAddress(
                 TestData.FIRST_NAME,
                 TestData.LAST_NAME,
@@ -67,11 +69,11 @@ public class LieferadresseDesktopTest {
         );
         editAddressPage.saveAddress();
 
-        // Schritt 4: Erfolgsmeldung prüfen
         String successMsg = editAddressPage.getSuccessMessage();
         assertTrue(successMsg.contains("Adresse erfolgreich geändert."), "Erfolgsmeldung nicht gefunden!");
     }
 
+    @Step("Kurze Wartezeit")
     private void waitShort() {
         try { Thread.sleep(2000); } catch (InterruptedException e) {}
     }
