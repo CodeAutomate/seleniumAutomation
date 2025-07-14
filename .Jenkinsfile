@@ -4,7 +4,6 @@ node {
         git branch: 'main', url: 'https://github.com/CodeAutomate/seleniumAutomation'
     }
 
-    // Credentials-Stage mit withCredentials-Block
     withCredentials([file(credentialsId: 'the-credentials', variable: 'MY_APP_CREDENTIALS')]) {
         stage('Copy Credentials') {
             echo "🔑 Kopiere Credentials aus Jenkins..."
@@ -29,9 +28,8 @@ node {
 
         stage('Allure Report') {
             echo "📊 Generating Allure report..."
-            bat 'mvn allure:report'
-            // optional: publish the report (requires Allure plugin on Jenkins)
-            allure includeProperties: false, jdk: '', reportBuildPolicy: 'ALWAYS'
+            bat 'mvn allure:report -Dallure.results.directory="C:\\Users\\tobia\\Desktop\\thalia-selenium\\allure-results"'
+            allure results: [[path: 'C:\\Users\\tobia\\Desktop\\thalia-selenium\\allure-results']], includeProperties: false, jdk: '', reportBuildPolicy: 'ALWAYS'
         }
 
         stage('Archive Test Results') {
