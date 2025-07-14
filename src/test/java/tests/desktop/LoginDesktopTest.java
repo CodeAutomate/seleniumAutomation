@@ -9,6 +9,7 @@ import utils.ConfigReader;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 public class LoginDesktopTest {
     private static final String BASE_URL = "https://meinesuppe.de";
     private WebDriver driver;

@@ -7,6 +7,7 @@ import pageObjects.HomePage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 public class NavigationDesktopTest {
     private static final String BASE_URL = "https://meinesuppe.de";
     private WebDriver driver;

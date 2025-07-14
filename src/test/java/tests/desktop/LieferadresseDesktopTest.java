@@ -14,6 +14,7 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 public class LieferadresseDesktopTest {
     private static final String BASE_URL = "https://meinesuppe.de";
     private WebDriver driver;

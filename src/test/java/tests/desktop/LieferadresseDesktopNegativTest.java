@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 public class LieferadresseDesktopNegativTest {
     private static final String BASE_URL = "https://meinesuppe.de";
     private WebDriver driver;

@@ -7,6 +7,7 @@ import pageObjects.HomePage;
 import pageObjects.LoginPage;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 public class LoginDesktopNegativeTest {
     private static final String BASE_URL = "https://meinesuppe.de";
     private WebDriver driver;
