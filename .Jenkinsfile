@@ -28,7 +28,7 @@ node {
 
         stage('Allure Report') {
             echo "📊 Generating Allure report..."
-            bat 'mvn allure:report -Dallure.results.directory="allure-results"'
+            bat 'mvn allure:report -Dallure.results.directory="target/allure-results"'
             allure results: [[path: 'target/allure-results']], includeProperties: false, jdk: '', reportBuildPolicy: 'ALWAYS'
         }
 
