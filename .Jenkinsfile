@@ -1,48 +1,46 @@
-ws('C:\\Users\\tobia\\Desktop\\thalia-selenium') {
-    node {
-        stage('Checkout') {
-            echo "📥 Cloning Git repository..."
-            git branch: 'main', url: 'https://github.com/CodeAutomate/seleniumAutomation'
+node('windows') {
+    stage('Checkout') {
+        echo "📥 Cloning Git repository..."
+        git branch: 'main', url: 'https://github.com/CodeAutomate/seleniumAutomation'
+    }
+
+    withCredentials([file(credentialsId: 'the-credentials', variable: 'MY_APP_CREDENTIALS')]) {
+        stage('Copy Credentials') {
+            echo "🔑 Kopiere Credentials aus Jenkins..."
+            bat 'copy "%MY_APP_CREDENTIALS%" src\\test\\resources\\config.properties'
         }
 
-        withCredentials([file(credentialsId: 'the-credentials', variable: 'MY_APP_CREDENTIALS')]) {
-            stage('Copy Credentials') {
-                echo "🔑 Kopiere Credentials aus Jenkins..."
-                bat 'copy "%MY_APP_CREDENTIALS%" src\\test\\resources\\config.properties'
-            }
+        stage('Setup Maven') {
+            echo "⚙️ Setting up Maven environment..."
+            def mvnHome = tool name: 'Maven_3.9', type: 'hudson.tasks.Maven$MavenInstallation'
+            env.PATH = "${mvnHome}\\bin;${env.PATH}"
+        }
 
-            stage('Setup Maven') {
-                echo "⚙️ Setting up Maven environment..."
-                def mvnHome = tool name: 'Maven_3.9', type: 'hudson.tasks.Maven$MavenInstallation'
-                env.PATH = "${mvnHome}\\bin;${env.PATH}"
-            }
+        stage('Build') {
+            echo "🔨 Building the project..."
+            bat 'mvn clean compile'
+        }
 
-            stage('Build') {
-                echo "🔨 Building the project..."
-                bat 'mvn clean compile'
-            }
+        stage('Test') {
+            echo "🧪 Running Selenium JUnit5 tests..."
+            bat 'mvn test'
+        }
 
-            stage('Test') {
-                echo "🧪 Running Selenium JUnit5 tests..."
-                bat 'mvn test'
-            }
+        stage('Allure Report') {
+            echo "📊 Generating Allure report..."
+            bat 'mvn allure:report -Dallure.results.directory="target/allure-results"'
+            allure results: [[path: 'allure-report']], includeProperties: false, jdk: '', reportBuildPolicy: 'ALWAYS'
+        }
 
-            stage('Allure Report') {
-                echo "📊 Generating Allure report..."
-                bat 'mvn allure:report -Dallure.results.directory="target/allure-results"'
-                allure results: [[path: 'allure-report']], includeProperties: false, jdk: '', reportBuildPolicy: 'ALWAYS'
-            }
+        stage('Archive Test Results') {
+            echo "🗄️ Archiving surefire reports and JARs..."
+            junit 'target/surefire-reports/*.xml'
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+        }
 
-            stage('Archive Test Results') {
-                echo "🗄️ Archiving surefire reports and JARs..."
-                junit 'target/surefire-reports/*.xml'
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-            }
-
-            stage('Cleanup') {
-                echo "🧹 Cleaning up workspace..."
-                cleanWs()
-            }
+        stage('Cleanup') {
+            echo "🧹 Cleaning up workspace..."
+            cleanWs()
         }
     }
 }
